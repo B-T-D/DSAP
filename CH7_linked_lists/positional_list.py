@@ -70,7 +70,11 @@ class PositionalList(_DoublyLinkedBase):
         return self._make_position(self._header._next)
 
     def last(self):
-        """Return the last Position in the list (or None if empty)."""
+        """Return the last Position in the list (or None if empty).
+
+        Returns
+            (Position): Position object.
+        """
         return self._make_position(self._trailer._prev)
 
     def before(self, p):
@@ -80,7 +84,10 @@ class PositionalList(_DoublyLinkedBase):
         return self._make_position(node._prev)
 
     def after(self, p):
-        """Return the Position just after Position p (or NOne if p is last).
+        """Return the Position just after Position p (or None if p is last).
+
+        Returns:
+            (Position): Position object
         """
         node = self._validate(p)
         return self._make_position(node._next)

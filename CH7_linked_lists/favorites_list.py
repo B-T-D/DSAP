@@ -1,3 +1,5 @@
+# Tests with unittest
+
 from positional_list import PositionalList
 
 class FavoritesList:
@@ -13,8 +15,12 @@ class FavoritesList:
 
     # -------------------- nonpublic utilities --------------------------------
     def _find_position(self, e):
-        """Search for element e and return its Position (or None if not found)."""
-        walk = self._data.first()
+        """Search for element e and return its Position (or None if not found).
+
+        Returns:
+            walk (Position): Position object.
+        """
+        walk = self._data.first() # a Position object
         while walk is not None and walk.element()._value != e:
             walk = self._data.after(walk)
         return walk
@@ -49,13 +55,47 @@ class FavoritesList:
         #   is meant to be nonpublic.
 
     def access(self, e):
-        """Access element e, thereby increasing its access count."""
+        """
+        Access element e, thereby increasing its access count.
+
+        e (object): The actual stored item--the _value attribute of the _Item object.
+                    Not the _Item object itself (that's not to be accessed from outside the
+                    class) and not the Position object. Need not be the identical
+                    object in memory; e.g. separate string or int object with same
+                    value will be accessed successfully. 
+        """
         p = self._find_position(e) # try to locate existing element
         if p is None:
             p = self._data.add_last(self._Item(e)) # if new, place at end
         p.element()._count += 1 # always increment count
         self._move_up(p) # Move element forward if needed
 
-    def access(s
+    def remove(self, e):
+        """Remove element e from the list of favorites."""
+        p = self._find_position(e) # try to locate existing element
+        if p is not None:
+            self._data.delete(p) # delete, if found
+
+    def top(self, k):
+        """Generate sequence of top k elements in terms of access count.
+        Yields an iterator that can be used in a for loop; doesn't return
+        anything. 
+
+        Args:
+            k (int): Number of elements to include in the list. Must be a
+                positive nonzero integer no greater than the length of the list.
+
+        Returns:
+            None
+        """
+        if not 1 <= k <= len(self):
+            raise ValueError('Illegal value for k')
+        walk = self._data.first()
+        for j in range(k):
+            item = walk.element() # element of list is _Item
+            yield item._value # report user's element
+            walk = self._data.after(walk)
+
+        
                     
         
