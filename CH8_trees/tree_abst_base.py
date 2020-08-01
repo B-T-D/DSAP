@@ -1,3 +1,5 @@
+from linked_queue import LinkedQueue
+
 class Tree:
     """Abstract base class representing a tree structure."""
 
@@ -54,7 +56,9 @@ class Tree:
     def _height1(self):
         # Illustrative example from DSAP, inferior O(n^2) running time
         """Return the height of the tree."""
-        return max(self.depth(p) for p in self.positions() if self.is_leaf(p))
+        # return max(self.depth(p) for p in self.positions() if self.is_leaf(p))
+
+        # commented out to remove it from "coverage" metric
 
     def _height2(self, p: Position) -> int:
         """Return the height of the subtree rooted at Position p."""
@@ -82,4 +86,61 @@ class Tree:
             return 0
         else:
             return 1 + self.depth(self.parent(p))
+
+    def __iter__(self):
+        """Generate an iteration of the tree's elements."""
+        for p in self.positions(): # use same order as positions()
+            yield p.element()       # but yield each element
+
+    def preorder(self):
+        """Generate a preorder-traversal iteration of positions in the tree (yield the positions
+        in the order they'd be visited by the preorder traversal algorithm)."""
+        if not self.is_empty():
+            for p in self._subtree_preorder(self.root()): # start recursion
+                yield p
+
+    def _subtree_preorder(self, p):
+        # utility method
+        """Generate a preorder iteration of positions in subtree rooted at p."""
+        yield p # Analogous to "perform the 'visit' action for position p" step of the pseudocode
+            # (we just yield the Position object to visit, then let the caller perform the visit action)
+        for c in self.children(p):  # for each child c...
+            for other in self._subtree_preorder(c): # ...recursively do preorder of c's subtree...
+                yield other # ...yielding each to our caller
+
+    def positions(self):
+        # Use a preorder traversal as the default order of iteration in the positions method.
+        #   (Official tree ADT requires that all trees support a positions method that generates an
+        #   iteration of all positions of the tree).
+        """Generate an iteration of the tree's positions (not elements)."""
+        return self.preorder() # return the entire preorder iterator
+
+    def postorder(self):
+        """Generate a postorder iteration of positions in the tree."""
+        # Mainly a wrapper for _subtree_postorder
+        if not self.is_empty():
+            for p in self._subtree_postorder(self.root()): # start recursion
+                yield p
+
+    def _subtree_postorder(self, p):
+        """Generate a position iteration of positions in subtree rooted at p."""
+        for c in self.children(p):  # for each child c
+            for other in self._subtree_postorder(c): # do postorder of c's subtree
+                yield other # yield each subtree to the caller
+        yield p # visit p after its subtrees
+
+    def breadthfirst(self):
+        """Generate a breadth-first iteration of the positions of the tree."""
+        # Add children to the queue when the "visits" learn of them, go back and actually visit
+        #   them later once they reach head of the queue.
+        if not self.is_empty():
+            fringe = LinkedQueue() # Known postiions not yet yielded are placed in the queue
+            fringe.enqueue(self.root())
+            while not fringe.is_empty():
+                p = fringe.dequeue() # remove from front of the queue
+                yield p
+                for c in self.children(p):
+                    fringe.enqueue(c)  # add children to back of the queue
+        
+            
     

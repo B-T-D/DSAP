@@ -23,7 +23,27 @@ class TestSimpleCases(unittest.TestCase):
         self.tree._add_right(self.left, "L3 right-1")
         self.tree._add_left(self.right, "L3 left-2")
         self.tree._add_right(self.right, "L3 right-2")
-        
+
+    def test_validate(self):
+        # Passing an object of type other than Position should raise TypeError
+        with self.assertRaises(TypeError):
+            self.tree._validate("spam")
+        # Wrong container should raise value error
+        position_from_other_container = LinkedBinaryTree()._add_root("spam root")
+        with self.assertRaises(ValueError):
+            self.tree._validate(position_from_other_container)
+        # If node was deprecated, meaning it was set to be its own parent per
+        #   the internal convention for deprecated nodes, then should raise
+        #   value error.
+        p = self.lev3_first_left
+        p._node._parent = p._node
+        with self.assertRaises(ValueError):
+            self.tree._validate(p)
+
+
+
+    # ---------------------------------- public methods --------------------
+     
     def test_root(self):
         blank_tree = LinkedBinaryTree()
         root = blank_tree.root()
@@ -60,7 +80,10 @@ class TestSimpleCases(unittest.TestCase):
             self.tree.num_children(self.lev3_first_left), 0) # This node should be in the
                                                      # bottom level of the setUp
                                                      # tree and therefore have
-                                                     # no children.
+                                                        # no children.
+
+    # ------------------- tests for concrete methods inherited from Tree ------
+
     def test_is_root(self):
         """Concrete method implemented in the Tree abstract base class and
         inherited through to LBT class."""
@@ -78,7 +101,6 @@ class TestSimpleCases(unittest.TestCase):
         # testing _attach will "coverage this
         pass
         
-
     def test_height(self):
         """
         Test the height method defined in the Tree abstract base class
@@ -119,6 +141,63 @@ class TestSimpleCases(unittest.TestCase):
         self.tree._attach(self.lev3_first_left, new_tree, new_tree2)
         # For now just pass if none of these calls raised an error, no
         #   unittest.assertSomething method call
+
+    def test_positions(self): # This covers postorder() method for purposes
+                                # of the "coverage" metric.
+        for position in self.tree.positions(): # Test that they can be iterated
+            self.assertIsInstance(position, LinkedBinaryTree.Position) # and that
+                                                        # they're all Positions
+
+##    def test_preorder(self): # placeholder
+##        pass
+
+    def test_postorder(self):
+        for position in self.tree.postorder():
+            self.assertIsInstance(position, LinkedBinaryTree.Position)
+        # TODO: This only tests that the iterator works, doesn't prove that the
+        #   nodes are being visited in the intended order.
+        
+class TestTraversalMethods(unittest.TestCase):
+    # Separate class with a setUp tree designed for easy testing of intended
+    #   traversal order.
+
+    def setUp(self):
+        self.tree = LinkedBinaryTree()
+        self.root = self.tree._add_root(1)
+        self.element2 = self.tree._add_left(self.root, 2)
+        self.element3 = self.tree._add_right(self.root, 3)
+        self.element4 = self.tree._add_left(self.element2, 4)
+        self.element5 = self.tree._add_right(self.element2, 5)
+        self.element6 = self.tree._add_left(self.element3, 6)
+        self.element7 = self.tree._add_right(self.element3, 7)
+
+    def test_preorder(self):
+        visits_expected = [1, 2, 4, 5, 3, 6, 7]
+        visits_actual = [] * 7 # List to store the visits in the order they happened
+        for position in self.tree.preorder():
+            visits_actual.append(position.element())
+        self.assertEqual(visits_actual, visits_expected)
+
+    def test_postorder(self):
+        visits_expected = [4,5,2,6,7,3,1]
+        visits_actual = [] * 7 # List to store the visits in order
+        for position in self.tree.postorder():
+            visits_actual.append(position.element())
+        self.assertEqual(visits_actual, visits_expected)
+
+    def test_breadthfirst(self):
+        visits_expected = [1, 2, 3, 4, 5, 6, 7]
+        visits_actual = [] * 7
+        for position in self.tree.breadthfirst():
+            visits_actual.append(position.element())
+        self.assertEqual(visits_actual, visits_expected)
+
+##    def test_parenth_print(self):
+##        # putting here for expediency, not meant as a proper test of that method
+##        #   (which isn't even nec meant to be in the LBT class)
+##        self.tree.parenthesize(self.root)
+        
+    
         
 if __name__ == '__main__':
     unittest.main()

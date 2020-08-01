@@ -184,6 +184,22 @@ class LinkedBinaryTree(BinaryTree):
             node._right = t2._root
             t2._root = None # set t2 instance to empty
             t2._size = 0
+
+    # ---------------- parenthetic string representation example -------------
+    def parenthesize(self, p):
+        """Print parenthetic representation of the subtree rooted at p."""
+        # todo work in a call to _validate (which returns node not position)
+        print(p.element(), end='') # use of end avoids trailing newline
+        if not self.is_leaf(p):
+            first_time = True
+            for c in self.children(p):
+                sep = ' (' if first_time else ', ' # determine proper separator
+                print(sep, end='')
+                first_time = False # any future passes will not be the first
+                self.parenthesize(c)
+            print(')', end='') # include closing parentheses
+
+    
         
 
     
