@@ -7,7 +7,7 @@ class TicTacToe:
         self._board = [[' '] * 3 for j in range(3)] # 3 x 3 2D array of space character strings
         self._player = 'X' # X moves first
 
-    def mark(self, i, j):
+    def mark(self, i: int, j:int) -> None:
         """Put an X or O mark at position (i, j) for next player's turn."""
         if not (0 <= i <= 2 and 0 <= j <= 2):
             raise ValueError('Invalid board position')
@@ -27,6 +27,10 @@ class TicTacToe:
 
         Args:
             mark (str): 'X' or 'O'
+
+        Returns:
+            (bool): True if current game board state is a win for the
+                current player, else False.
         """
 
         board = self._board # local variable for code compactness here

@@ -18,7 +18,7 @@ class LinkedBinaryTree(BinaryTree):
         """An abstraction representing the location of a single element."""
 
         def __init__(self, container, node):
-            """Constructor should not be invokce by user."""
+            """Constructor should not be invoked by user."""
             self._container = container
             self._node = node
 
