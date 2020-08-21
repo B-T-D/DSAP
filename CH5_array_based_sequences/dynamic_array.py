@@ -13,7 +13,7 @@ class DynamicArray:
         """Return number of elements stored in the array."""
         return self._n
     
-    
+    def __str__(self):
     
     def bad__str__(self): # this is a dumb (memory inefficient) way to return the string.
         """A bad way to return the string representation of this data structure."""
