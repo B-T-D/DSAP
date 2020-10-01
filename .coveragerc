@@ -2,4 +2,4 @@
 omit = 
 	env\\*
 	env/*
-	/home/*
+	home/*
