@@ -1,6 +1,6 @@
 [run]
 omit = 
-	travis/*
+	/travis/*
 	env\\*
 	env/*
 	
