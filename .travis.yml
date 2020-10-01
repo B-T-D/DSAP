@@ -4,10 +4,10 @@ python:
     - "3.8"
 
 install:
-    - pwd
     - pip install -r requirements.txt 
 
 script:
     - pwd
+    - python3 -m test_starter_util
     - pytest
 

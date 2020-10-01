@@ -4,6 +4,7 @@ import os, sys
 
 print("teststarter util ran")
 
+print(os.name)
 this_directory = os.path.dirname(__file__)
 
 for subdirectory in os.scandir():
