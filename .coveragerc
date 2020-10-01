@@ -1,4 +1,5 @@
 [run]
 omit = 
-	/home/travis/
+	env\*
+	/home/travis/virtualenv/
 	
