@@ -9,7 +9,6 @@ install:
 script:
     - pwd
     - python3 -m test_discovery_helper_util
-    - pytest
-    - sbt clean coverage test
-after_success: "sbt coveralls"
+    - pytest --cov=DSAP/
+after_success: "coveralls"
 
