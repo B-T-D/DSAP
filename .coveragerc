@@ -1,4 +1,4 @@
 [run]
 omit = 
-	/home/travis/*
+	/home/travis/
 	
