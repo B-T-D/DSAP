@@ -10,4 +10,4 @@ else: # in TravisCI default env specifically, os.name evaluates to str "posix"
     for subdirectory in os.scandir():
         sys.path.append(os.path.abspath(subdirectory.name+ "/"))
 
-print(f"Test-discovery helper '{this_filename}' ran")
+print(f"Test-discovery helper ran")
