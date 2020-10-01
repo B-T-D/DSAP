@@ -9,6 +9,6 @@ install:
 script:
     - pwd
     - python3 -m test_discovery_helper_util
-    - pytest --cov=DSAP/
+    - pytest --cov
 after_success: "coveralls"
 
