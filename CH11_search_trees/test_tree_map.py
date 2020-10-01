@@ -1,3 +1,5 @@
+import sys, os
+
 import unittest
 
 from tree_map import TreeMap
@@ -12,6 +14,9 @@ class TestSimpleTreeMap(unittest.TestCase):
     
     def setUp(self):
         pass
+
+    def test_failer(self):
+        self.fail()
 
 if __name__ == '__main__':
     unittest.main()

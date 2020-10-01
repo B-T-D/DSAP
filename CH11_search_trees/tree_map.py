@@ -6,7 +6,6 @@ ch10_directory = '../CH10_maps_hash_tables' # for MapBase
 sys.path.insert(0, os.path.abspath(ch8_directory))
 sys.path.insert(1, os.path.abspath(ch10_directory))
 
-
 from linked_binary_tree import LinkedBinaryTree
 from map_base_abc import MapBase
 
