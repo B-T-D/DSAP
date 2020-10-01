@@ -26,11 +26,25 @@ class TreeMap(LinkedBinaryTree, MapBase):
     #### nonpublic utilities ####
     def _subtree_search(self, p, k):
         """Return Position of p's subtree having key k, or last node
-        searched."""
-        if k == p.key():
+        searched.
+
+        Args:
+            p (Position): Root Position of the subtree that will be searched.
+            k (any): Value of key to search for. Of appropriate type for the tree.
+        """
+            # TODO ^ or won't the keys actually always be hashed to ints for
+            #   purposes of the ultimate, underlying tree?
+        
+        if k == p.key(): # base case 1: found match
             return p
-        elif k < p.key():
-            if self.left(p) is not None
+        elif k < p.key(): # search left subtree recursively
+            if self.left(p) is not None:
+                return self._subtree_search(self.left(p), k)
+        else: # search right subtree recursively
+            if self.right(p) is not None:
+                return self._subtree_search(self.right(p), k)
+        return p # base case 2: No match, return the root position of the
+                    # searched subtree. 
 
 def main():
     print("imports ok")
