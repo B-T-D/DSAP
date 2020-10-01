@@ -1,7 +1,7 @@
 import unittest
 import random
 
-from tic_tac_toe.general_tree import GeneralTree
+from general_tree import GeneralTree
 
 class TestNode(unittest.TestCase):
     """Tests for the _Node nested nonpublic class."""
