@@ -44,7 +44,27 @@ class TreeMap(LinkedBinaryTree, MapBase):
             if self.right(p) is not None:
                 return self._subtree_search(self.right(p), k)
         return p # base case 2: No match, return the root position of the
-                    # searched subtree. 
+                    # searched subtree.
+
+    def _subtree_first_position(self, p):
+        """Return Position of first item (item with minimum key in the tree)
+        in subtree rooted at p."""
+        walk = p
+        while self.left(walk) is not None: # If there are further left children,
+            walk = self.left(walk)      #  then not at the min yet.
+        return walk
+
+    def _subtree_last_position(self, p):
+        """Return Position of last item (item with max key) in subtree rooted
+        at p."""
+        walk = p
+        while self.right(walk) is not None: # If there are further right children,
+            walk = self.right(walk)         # then can't be at max yet.
+        return walk
+
+    def first(self):
+        """Return the first Position in the tree (or None if empty)."""
+        return self._subtree_first_position(self.root()) if len(self) > 0 else None
 
 def main():
     print("imports ok")
