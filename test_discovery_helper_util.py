@@ -2,13 +2,6 @@
 environment in which the tests are being run."""
 
 import os, sys
-from pathlib import Path
-
-this_filename = Path(__file__).name
-
-assert (this_filename.startswith("test") or this_filename.endswith("test.py")),\
-"Test discovery helper's filename must start or end with 'test'"
-# Otherwise pytest won't run it. 
 
 if os.name == "nt": # If windows use backslash
     for subdirectory in os.scandir():

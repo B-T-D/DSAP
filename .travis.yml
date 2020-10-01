@@ -8,6 +8,6 @@ install:
 
 script:
     - pwd
-    - python3 -m test_starter_util
+    - python3 -m test_discovery_helper_util
     - pytest
 
