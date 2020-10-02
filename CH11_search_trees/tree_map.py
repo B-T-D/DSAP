@@ -42,8 +42,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
         else: # search right subtree recursively
             if self.right(p) is not None:
                 return self._subtree_search(self.right(p), k)
-        return p # base case 2: No match, return the root position of the
-                    # searched subtree.
+        return p # base case 2: No match, return the final node searched
 
     def _subtree_first_position(self, p):
         """Return Position of first item (item with minimum key in the tree)
@@ -94,7 +93,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
         # Authors don't implement this one, they just say "symmetrical with TreeMap.before()"
         self._validate(p)
         if self.right(p):
-            return self._subtree_last_position(self.left(p))
+            return self._subtree_first_position(self.right(p))
         else:
             walk = p
             above = self.parent(walk)
@@ -133,7 +132,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
                 p = self.after(p) # ...then look at immediate next greatest value
             return (p.key(), p.value()) if p is not None else None
 
-    def find_range(self, start, stop):
+    def find_range(self, start=None, stop=None):
         """Iterate all (key, value) pairs such that start <= key , stop.
 
         If start is None, iteration begins with minimum key in the map.
@@ -145,7 +144,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
             else:
                 # Initialize p with logic similar to find_ge().
                 p = self.find_position(start)
-                if p.key() < start:
+                if p.key() < start: # If there's no key exactly equal to start 
                     p = self.after(p)
             while p is not None and (stop is None or p.key() < stop):
                 yield (p.key(), p.value())
@@ -211,12 +210,18 @@ class TreeMap(LinkedBinaryTree, MapBase):
                 return # successful deletion complete
             self._rebalance_access(p) # hook for balanced tree subclasses
         raise KeyError(f'KeyError: {repr(k)}')
-        
-            
-            
 
-def main():
-    print("imports ok")
+    #### Hooks for rebalancer methods ####
 
-if __name__ == '__main__':
-    main()
+    def _rebalance_access(self, p):
+        return None
+
+    def _rebalance_insert(self, p): # empty hook
+        """
+        Args:
+            p (Position): A Position object.
+        """
+        return None
+
+    def _rebalance_delete(self, p):
+        return None

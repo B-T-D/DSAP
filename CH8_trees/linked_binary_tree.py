@@ -1,3 +1,5 @@
+"""Concrete-class implementation of a linked-list based binary tree."""
+
 from binary_tree_abst import BinaryTree
 
 class LinkedBinaryTree(BinaryTree):
@@ -13,7 +15,7 @@ class LinkedBinaryTree(BinaryTree):
             self._right = right
 
     class Position(BinaryTree.Position): # BinaryTree abst class already had
-                                            # a Position nexted class that it
+                                            # a Position nested class that it
                                             # inheirited from Tree abst base class
         """An abstraction representing the location of a single element."""
 
