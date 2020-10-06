@@ -214,17 +214,17 @@ class TreeMap(LinkedBinaryTree, MapBase):
     #### Hooks for rebalancer methods ####
 
     def _rebalance_access(self, p):
-        return None
+        pass
 
     def _rebalance_insert(self, p): # empty hook
         """
         Args:
             p (Position): A Position object.
         """
-        return None
+        pass
 
     def _rebalance_delete(self, p):
-        return None
+        pass
 
     #### Nonpublic methods for rotating and restructuring
         # Factory-ed here for reusability in inheritor classes
@@ -257,7 +257,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
                          x,
                          make_left_child=y == z._left) # passing an expression that will evaluate to False
         # Now rotate x and y, including transfer of middle subtree:
-        if x == y.left:
+        if x == y._left:
             self._relink(y, x._right, False) # x._right becomes left child of y
             self._relink(x, y, False) # y becomes right child of x
         else:
