@@ -98,17 +98,17 @@ class RedBlackTreeMap(TreeMap):
                 self._set_red(y)
                 if self._is_red(z):
                     self._set_black(z) # this resolves the problem
-                elif not self.is_root(x):
+                elif not self.is_root(z):
                     self._fix_deficit(self.parent(z), self.sibling(z))
                         # ^ recur upward
-            else: # Case 3: y is red; rotate misaligned 3-node and repeat
-                self._rotate(y)
-                self._set_black(y)
-                self._set_red(z)
-                if z == self.right(y):
-                    self._fix_deficit(z, self.left(z))
-                else:
-                    self._fix_deficit(z, self.right(z))
+        else: # Case 3: y is red; rotate misaligned 3-node and repeat
+            self._rotate(y)
+            self._set_black(y)
+            self._set_red(z)
+            if z == self.right(y):
+                self._fix_deficit(z, self.left(z))
+            else:
+                self._fix_deficit(z, self.right(z))
         
         
 

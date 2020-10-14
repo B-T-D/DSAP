@@ -6,7 +6,7 @@ class TestInitialization(unittest.TestCase):
 
     def test_init(self):
         test_tree = SplayTreeMap()
-        self.assertIsInstance(test_tree,SplayTreeMap)
+        self.assertIsInstance(test_tree, SplayTreeMap)
 
 class TestSimpleSplayTree(unittest.TestCase):
     """Basic-functionality tests using a small SplayTreeMap instance with
