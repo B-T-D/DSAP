@@ -41,9 +41,12 @@ class RedBlackTreeMap(TreeMap):
 
     #### Support for insertions
     def _rebalance_insert(self, p):
+        assert type(p) == self.Position
+        assert p._node._red
         self._resolve_red(p) # new node is always red
 
-    def _resolve_red(self, p):
+    def _resolve_red(self, p) -> None:
+        assert type(p) == self.Position
         if self.is_root(p):
             self._set_black(p) # make root black
         else:

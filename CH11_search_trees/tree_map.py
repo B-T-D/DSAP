@@ -264,10 +264,13 @@ class TreeMap(LinkedBinaryTree, MapBase):
             self._relink(y, x._left, True) # x._left becomes right child of y
             self._relink(x, y, True) # y becomes left child of x
 
-    def _restructure(self, x):
+    def _restructure(self, x) -> Position:
         """Perform trinode restructure of Position x with parent/grandparent."""
         y = self.parent(x)
         z = self.parent(y)
+        assert type(x) == self.Position
+        assert type(y) == self.Position
+        assert type(z) == self.Position, f"z was {z} with type {type(z)}"
         if (x == self.right(y)) == (y == self.right(z)): # matching alignments
             self._rotate(y) # single rotation (of y)
             return y # y is the new subtree root
