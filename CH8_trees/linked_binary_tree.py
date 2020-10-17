@@ -40,11 +40,7 @@ class LinkedBinaryTree(BinaryTree):
         if p._container is not self:
             raise ValueError('p does not belong to this container')
         if p._node._parent is p._node: # convention for deprecated nodes
-##            raise ValueError('p is no longer valid')
-
-            # Temporarily commented out to make red-black tree implementation's
-            #   deletion work. Not sure if error is authors' or mine. 
-            pass
+            raise ValueError('p is no longer valid')
         return p._node
 
     def _make_position(self, node):
