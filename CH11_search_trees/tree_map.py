@@ -33,18 +33,15 @@ class TreeMap(LinkedBinaryTree, MapBase):
         """
             # TODO ^ or won't the keys actually always be hashed to ints for
             #   purposes of the ultimate, underlying tree?
-        print(f"SEARCHING p.key()={p.key()} FOR k={k}")
+        #print(f"SEARCHING p.key()={p.key()} FOR k={k}")
         if k == p.key(): # base case 1: found match
             return p
         elif k < p.key(): # search left subtree recursively
             if self.left(p) is not None:
-                print(f"****LEFT subtree recursive search: self.left(p) had key {self.left(p).key()}")
                 return self._subtree_search(self.left(p), k)
         else: # search right subtree recursively
             if self.right(p) is not None:
-                print(f"****RIGHT subtree recursive search: self.right(p) had key {self.right(p).key()}")
                 return self._subtree_search(self.right(p), k)
-        print(f"Reached no-match base case FOR k={k}")
         return p # base case 2: No match, return the final node searched
 
     def _subtree_first_position(self, p):
@@ -171,7 +168,6 @@ class TreeMap(LinkedBinaryTree, MapBase):
         if self.is_empty(): # Easy case where new kvp is simply the root
             leaf = self._add_root(self._Item(k, v)) # from LinkedBinaryTree
         else:
-            print(f"-----TreeMap.__setitem__ is calling subtree search at subtree rooted p.key() = {self.root().key()}-----")
             p = self._subtree_search(self.root(), k)
             if p.key() == k: # If that key is already in the tree
                 p.element()._value = v # Replace existing item's value
