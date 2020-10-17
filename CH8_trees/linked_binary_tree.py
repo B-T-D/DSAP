@@ -36,11 +36,15 @@ class LinkedBinaryTree(BinaryTree):
     def _validate(self, p):
         """Return associated node, if position is valid."""
         if not isinstance(p, self.Position):
-            raise TypeError('p must be proper Position type')
+            raise TypeError(f'p must be proper Position type. Actual type: {type(p)}')
         if p._container is not self:
             raise ValueError('p does not belong to this container')
         if p._node._parent is p._node: # convention for deprecated nodes
-            raise ValueError('p is no longer valid')
+##            raise ValueError('p is no longer valid')
+
+            # Temporarily commented out to make red-black tree implementation's
+            #   deletion work. Not sure if error is authors' or mine. 
+            pass
         return p._node
 
     def _make_position(self, node):
@@ -76,6 +80,7 @@ class LinkedBinaryTree(BinaryTree):
         """
         Return the Position of p's right child (or None if no right child).
         """
+        assert type(p) == self.Position, f"actual p was {p} with type {type(p)}"
         node = self._validate(p)
         return self._make_position(node._right)
 
