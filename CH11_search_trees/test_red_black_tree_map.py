@@ -110,8 +110,6 @@ class TestSimpleRedBlackTree(unittest.TestCase):
         ## Adding 5
         self.tree[5] = self.val
 
-
-
         ## Adding 14
         self.tree[14] = self.val
 
@@ -155,11 +153,63 @@ class TestSimpleRedBlackTree(unittest.TestCase):
         #   method to call:
         self.assertEqual(initial_num_elements - 1, len(self.tree))
 
-    def test_delete_leaf(self):
+    def test_delete_red_leaf_left_child(self):
         initial_num_elements = len(self.tree)
+        delete_me_key = 17
+        del self.tree[delete_me_key]
+        self.assertEqual(initial_num_elements - 1, len(self.tree))
 
-        # Highest-numbered key should always be a leaf
-        delete_me_key = self.tree.last().key()
+    def test_delete_red_leaf_right_child(self):
+        initial_num_elements = len(self.tree)
+        delete_me_key = 5
+        del self.tree[delete_me_key]
+        self.assertEqual(initial_num_elements - 1, len(self.tree))
+
+    def test_delete_black_leaf_left_child(self):
+        initial_num_elements = len(self.tree)
+        delete_me_key = 15
+        del self.tree[delete_me_key]
+        self.assertEqual(initial_num_elements - 1, len(self.tree))
+
+    def test_delete_black_leaf_right_child(self):
+        initial_num_elements = len(self.tree)
+        delete_me_key = 12
+        del self.tree[delete_me_key]
+        self.assertEqual(initial_num_elements - 1, len(self.tree))
+
+    def test_delete_black_node_with_one_red_child(self):
+        initial_num_elements = len(self.tree)
+        
+        # confirm that 18 is still a black node with a single red child.
+        pos18 = self.tree.find_position(18)
+        assert not self.tree._is_red(pos18)
+        assert self.tree.num_children(pos18) == 1
+        assert self.tree.left(pos18).key() == 17
+        assert self.tree._is_red(self.tree.left(pos18))
+
+        del self.tree[18]
+        self.assertEqual(initial_num_elements - 1, len(self.tree))
+        
+
+    def test_delete_black_node_with_two_red_children(self):
+        """Test the case where rebalance delete is called after removal of a
+        black node that had a red child."""
+        delete_me_key = 18
+
+        self.tree[19] = self.val
+        assert self.tree.num_children(self.tree.find_position(delete_me_key)) == 2
+            # ^ 18 should have two children now
+        initial_num_elements = len(self.tree)
+        
+        del self.tree[delete_me_key]
+        self.assertEqual(initial_num_elements - 1, len(self.tree))
+
+    def test_delete_black_node_with_left_child_only(self):
+        """Test the case where rebalance delete is called after removal of a
+        black node that had a red child."""
+        delete_me_key = 18
+        initial_num_elements = len(self.tree)
+        
         del self.tree[delete_me_key]
         self.assertEqual(initial_num_elements - 1, len(self.tree))
 
@@ -173,17 +223,17 @@ class TestSimpleRedBlackTree(unittest.TestCase):
         self.assertEqual(False, tree.root()._node._red) # The rebalance delete
             #   method should set root to black
 
-##    def test_rebalance_delete_one_child(self):
-##        initial_num_elements = len(self.tree)
-##        # Where surviving parent has one child:
-##        del self.tree[8]
-##        self.assertEqual(initial_num_elements - 1, len(self.tree))
+    def test_rebalance_delete_one_child(self):
+        initial_num_elements = len(self.tree)
+        # Where surviving parent has one child:
+        del self.tree[5]
+        self.assertEqual(initial_num_elements - 1, len(self.tree))
 
-##    def test_rebalance_delete_two_children(self):
-##        initial_num_elements = len(self.tree)
-##        # Where surviving parent has two children:
-##        del self.tree[5]
-##        self.assertEqual(initial_num_elements - 1, len(self.tree))
+    def test_rebalance_delete_two_children(self):
+        initial_num_elements = len(self.tree)
+        # Where surviving parent has two children:
+        del self.tree[5]
+        self.assertEqual(initial_num_elements - 1, len(self.tree))
 
     def test_delete_nonexistent_element(self):
         """Does attempting to delete a key that isn't in the tree raise
@@ -198,7 +248,23 @@ class TestSimpleRedBlackTree(unittest.TestCase):
         del self.tree[18]
         self.assertEqual(initial_num_elements - 1, len(self.tree))
 
-        
+    def test_successive_deletions(self):
+        # Delete elements one by one in the order depicted in diagram figure 11.41
+        del self.tree[3]
+        del self.tree[12]
+        del self.tree[17]
+        del self.tree[18]
+        del self.tree[15]
+        del self.tree[16]
+        self.assertEqual(4, len(self.tree))
+        # Continuing til deletion of entire tree...
+        del self.tree[7]
+        del self.tree[5] # deletion of black parent (which is also root, here)
+                            # with two black children
+        del self.tree[4]
+        del self.tree[14]
+        self.assertTrue(self.tree.is_empty())
+
 
 if __name__ == '__main__':
     unittest.main()

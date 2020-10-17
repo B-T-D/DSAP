@@ -69,19 +69,31 @@ class RedBlackTreeMap(TreeMap):
 
     #### Support for deletions
     def _rebalance_delete(self, p):
+        """
+
+        Args:
+            p (Position): Parent of the node-Position that was deleted.
+        """
         if len(self) == 1:
             self._set_black(self.root()) # special case: ensure that root is black
         elif p is not None:
             n = self.num_children(p)
-            if n == 1: # deficit exists unless child is red leaf
+            # If p has one child, then the removed node was a black leaf. This
+            #   means there's a deficit unless that one remaining child is a
+            #   red leaf:
+            if n == 1
                 c = next(self.children(p))
                 if not self._is_red_leaf(c):
                     self._fix_deficit(p, c)
-            elif n == 2: # removed black node with red child
+            # If p has two children, then removed node was a black node with
+            #   one red child which was promoted. 
+            elif n == 2:
                 if self._is_red_leaf(self.left(p)):
                     self._set_black(self.left(p))
                 else:
                     self._set_black(self.right(p))
+        # If p has no children, then the removed node was a red leaf and no
+        #   rebalancing action needed.
 
     def _fix_deficit(self, z, y):
         """Resolve black deficit at z, where y is the root of z's heavier
