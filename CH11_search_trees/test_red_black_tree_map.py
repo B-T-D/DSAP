@@ -43,33 +43,77 @@ class TestFoundationalCases(unittest.TestCase):
 class TestSimpleRedBlackTree(unittest.TestCase):
     """Basic-functionality tests using small RedBlackTreeMap instance with
     hardcoded entries created in SetUp method."""
-    # Test tree is running example at e.g. 532 figure 11.41(a)
 
     def setUp(self):
 
         self.tree = RedBlackTreeMap()
-        self.root_val = self.tree._Node("value at initial root (key=4)")
-        self.val = self.tree._Node("filler value") # general filler value
+        self.root_val = "value at initial root"
+        self.val = "filler value"
+
+        # DEBUG--Assert left/right/parent after each addition to confirm
+        #   tree shape is as intended. 
 
         # Adding in the order depicted in figure 11.35 p.517
         self.tree[4] = self.root_val
         assert len(self.tree) == 1
+        assert self.tree.root().key() == 4
 
+        ## Adding the first two children:
         self.tree[7] = self.val
         assert len(self.tree) == 2
+        # Should have gone in as right child:
+        assert self.tree.right(self.tree.find_position(4)).key() == 7,\
+        f"Actual right child was {self.tree.right(self.tree.find_position(4)).key()}"
+        # And should be black
+        assert self.tree._is_red(self.tree.find_position(7))
 
+    
         self.tree[12] = self.val
+            # ^ Should go in momentarily as 7's right child, then 7 should become root with 4 as
+            #   7's left child.
         assert len(self.tree) == 3
-        
+        # Should initially go in as right child of 7
+        pos12init = self.tree.right(self.tree.find_position(7))
+        assert pos12init.key() == 12
+        assert self.tree.root().key() == 7 # 7 should now be root
+        assert self.tree.left(self.tree.root()).key() == 4 # 4 should be left child
+        assert (self.tree._is_red(pos12init) and self.tree._is_red(self.tree.find_position(12)))
+            # ^ Both children of root should be red
+
+        ## Adding 15:
         self.tree[15] = self.val
         assert len(self.tree) == 4
-        
+        # Should be the right child of 12:
+        assert self.tree.right(self.tree.find_position(12)).key() == 15
+        assert self.tree._is_red(self.tree.find_position(15)) # 15 should be red
+
+        ## Adding 3:
         self.tree[3] = self.val
         assert len(self.tree) == 5
+        # Should be left child of 4:
+        assert self.tree.left(self.tree.find_position(4)).key() == 3
+        # And should be red:
+        assert self.tree._is_red(self.tree.find_position(3))
 
-        self.tree[8] = self.val # TODO why does key=5 cause recursion depth
-                                #   error??
-##        self.tree[5] = self.val
+        # Confirming tree is in order before attempting to add 5:
+            # (confirming the tree looks like fig 11.35(g))
+        assert not self.tree._is_red(self.tree.root()) # root should be black
+        assert self.tree.root().key() == 7 # 7 should be at root
+        assert not self.tree._is_red(self.tree.find_position(4)) # 4 should be black
+        assert not self.tree._is_red(self.tree.find_position(12)) # 12 should be black
+        assert self.tree.right(self.tree.root()).key() == 12 # 12 should still be right child of root
+        assert self.tree.left(self.tree.root()).key() == 4 # 4 should still be left child
+
+        assert self.tree.right(self.tree.find_position(4)).key is None,\
+        f"tree.right(pos4) expected None, actual {self.tree.right(self.tree.find_position(4)).key()}"
+
+        ## Adding 5
+        self.tree[5] = self.val
+
+
+##        self.tree[5] = self.val # TODO why does key=5 cause recursion depth
+##                                #   error??
+####        self.tree[5] = self.val
 ##        assert len(self.tree) == 6
 
         self.tree[14] = self.val
@@ -121,17 +165,24 @@ class TestSimpleRedBlackTree(unittest.TestCase):
         self.assertEqual(False, tree.root()._node._red) # The rebalance delete
             #   method should set root to black
 
-    def test_rebalance_delete_one_child(self):
-        initial_num_elements = len(self.tree)
-        # Where surviving parent has one child:
-        del self.tree[8]
-        self.assertEqual(initial_num_elements - 1, len(self.tree))
+##    def test_rebalance_delete_one_child(self):
+##        initial_num_elements = len(self.tree)
+##        # Where surviving parent has one child:
+##        del self.tree[8]
+##        self.assertEqual(initial_num_elements - 1, len(self.tree))
 
-    def test_rebalance_delete_two_children(self):
-        initial_num_elements = len(self.tree)
-        # Where surviving parent has two children:
-        del self.tree[15]
-        self.assertEqual(initial_num_elements - 1, len(self.tree))
+##    def test_rebalance_delete_two_children(self):
+##        initial_num_elements = len(self.tree)
+##        # Where surviving parent has two children:
+##        del self.tree[5]
+##        self.assertEqual(initial_num_elements - 1, len(self.tree))
+
+    def test_delete_nonexistent_element(self):
+        """Does attempting to delete a key that isn't in the tree raise
+        KeyError?"""
+        delete_me_key = 9001
+        with self.assertRaises(KeyError):
+            del self.tree[delete_me_key]
 
     def test_fix_deficit_case_2(self):
         initial_num_elements = len(self.tree)
