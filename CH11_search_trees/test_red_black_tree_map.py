@@ -104,28 +104,36 @@ class TestSimpleRedBlackTree(unittest.TestCase):
         assert self.tree.right(self.tree.root()).key() == 12 # 12 should still be right child of root
         assert self.tree.left(self.tree.root()).key() == 4 # 4 should still be left child
 
-        assert self.tree.right(self.tree.find_position(4)).key is None,\
+        assert self.tree.right(self.tree.find_position(4)) is None,\
         f"tree.right(pos4) expected None, actual {self.tree.right(self.tree.find_position(4)).key()}"
 
         ## Adding 5
         self.tree[5] = self.val
 
 
-##        self.tree[5] = self.val # TODO why does key=5 cause recursion depth
-##                                #   error??
-####        self.tree[5] = self.val
-##        assert len(self.tree) == 6
 
+        ## Adding 14
         self.tree[14] = self.val
 
+        ## Adding 18
         self.tree[18] = self.val
 
+        ## Adding 16
         self.tree[16] = self.val
-        # TODO key=16 also causes the recursion error. It's about where it's
-        #   being inserted in the tree, not what the key is specifically.
 
+        ## Adding 17
         self.tree[17] = self.val
 
+        assert len(self.tree) == 10
+        assert self.tree.root().key() == 14
+
+        first = self.tree.first()
+        assert first.key() == 3
+        assert self.tree._is_red(first) # 3 should be red
+
+        last = self.tree.last()
+        assert last.key() == 18
+        assert not self.tree._is_red(last) # 18 should be black
         
     def test_init(self):
         self.assertIsInstance(self.tree, RedBlackTreeMap)
