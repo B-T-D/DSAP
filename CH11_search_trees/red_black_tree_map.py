@@ -81,12 +81,12 @@ class RedBlackTreeMap(TreeMap):
             # If p has one child, then the removed node was a black leaf. This
             #   means there's a deficit unless that one remaining child is a
             #   red leaf:
-            if n == 1
+            if n == 1:
                 c = next(self.children(p))
                 if not self._is_red_leaf(c):
                     self._fix_deficit(p, c)
             # If p has two children, then removed node was a black node with
-            #   one red child which was promoted. 
+            #   one red child which was promoted 
             elif n == 2:
                 if self._is_red_leaf(self.left(p)):
                     self._set_black(self.left(p))
