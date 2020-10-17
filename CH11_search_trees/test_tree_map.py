@@ -316,6 +316,40 @@ class TestSimpleTreeMap(unittest.TestCase):
         key?"""
         with self.assertRaises(KeyError):
             del self.tree[9001]
-    
+
+class TestRestructure(unittest.TestCase):
+    """Specialized ad hoc tests to confirm _restructure correctly performs a trinode
+    restructuring."""
+
+    def setUp(self):
+        pass
+
+    def test_simple_single_rotation(self):
+        tree = TreeMap()
+        z = tree._add_root(tree._Item(1, "z")) # z starts as root
+        assert tree.root().key() == 1
+        y = tree._add_right(p=z, e=tree._Item(2, "y"))
+                            # y starts as right child of z
+
+        x = tree._add_right(p=y, e=tree._Item(3, "x"))
+        # x starts as right child of y, grandchild of z
+        assert len(tree) == 3
+        tree._restructure(x)
+        self.assertEqual("y", tree.root().value()) # y should be root
+        self.assertEqual("z", tree.left(tree.root()).value()) # z should be left
+        self.assertEqual("x", tree.right(tree.root()).value()) # x should be right
+
+        # y should now have no parent
+        self.assertIsNone(tree.parent(y))
+
+        # z and x should now be leaves with no children
+        self.assertIsNone(tree.right(x))
+        self.assertIsNone(tree.left(x))
+
+        #print(f"\n\n***********{tree.right(z).value()}*************\n\n")
+        self.assertIsNone(tree.right(z))
+        self.assertIsNone(tree.left(z))
+        
+
 if __name__ == '__main__':
     unittest.main()
