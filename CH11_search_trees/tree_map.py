@@ -71,6 +71,8 @@ class TreeMap(LinkedBinaryTree, MapBase):
     def before(self, p):
         """Return the Position just before p in the natural order. Return None if p is the
         first Position."""
+        # One step left, then always right reaches the greatest value that is
+        #   strictly less than p's key.
         self._validate(p) # inherited from LinkedBinaryTree
         if self.left(p):
             return self._subtree_last_position(self.left(p))
@@ -90,6 +92,8 @@ class TreeMap(LinkedBinaryTree, MapBase):
         Position.
         
         """
+        # One step right, then always left. To reach smallest value that is
+        #   strictly greater than p's key.
         # Authors don't implement this one, they just say "symmetrical with TreeMap.before()"
         self._validate(p)
         if self.right(p):
