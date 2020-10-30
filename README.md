@@ -11,4 +11,4 @@ To the extent code in this repository falls within copyright protection applicab
 The textbook is [available at Amazon](https://www.amazon.com/Structures-Algorithms-Python-Michael-Goodrich/dp/1118290275/). It's an excellent book. I strongly recommend buying a copy if you're coming from a Python background and want an authoritative, mathematical resource on data structures and algorithms!
 
 ## Original work
-For all textbook code included in this repository, I manually typed it into the Python source files here (rather than pasting from resources associated with the textbook). All unit tests covering the textbook's code are my original work.
+For all textbook code included in this repository, I manually typed it into the Python source files here (rather than pasting from resources associated with the textbook). All unit tests in this repository are my original work.
