@@ -3,4 +3,4 @@
 
 
 # DSAP
-Python data structure implementation examples
+Data structure and algorithm implementations in Python. Code initially from Data Structures and Algorithms in Python (Michael T. Goodrich, Roberto Tamassia, and Michael H. Goldwasser, 2013) is included as non-commercial "fair use". 
