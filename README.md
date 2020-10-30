@@ -12,3 +12,6 @@ The textbook is [available at Amazon](https://www.amazon.com/Structures-Algorith
 
 ## Original work
 For all textbook code included in this repository, I manually typed it into the Python source files here (rather than pasting from resources associated with the textbook). All unit tests in this repository are my original work.
+
+## Use of this repo
+This is meant as static reference code, not as a Python package. I made the repo public on the off chance someone might happen upon it and find it helpful. I wouldn't recommend cloning it as-is and trying to use it in a project. For example the requirements.txt may erroneously include some clutter stuff that's not actually needed for this repo's code, so you wouldn't want to have pip install those dependencies en masse. Also there would be license issues because of the code from the textbook.
