@@ -5,4 +5,5 @@
 # DSAP
 Data structure and algorithm implementations in Python.
 
-Code here initially from *Data Structures and Algorithms in Python* (Michael T. Goodrich, Roberto Tamassia, and Michael H. Goldwasser, 2013, [https://www.amazon.com/Structures-Algorithms-Python-Michael-Goodrich/dp/1118290275/](https://www.amazon.com/Structures-Algorithms-Python-Michael-Goodrich/dp/1118290275/)) is intended as non-commercial "fair use". 
+Code here initially from *Data Structures and Algorithms in Python* (Michael T. Goodrich, Roberto Tamassia, and Michael H. Goldwasser, 2013, [https://www.amazon.com/Structures-Algorithms-Python-Michael-Goodrich/dp/1118290275/](https://www.amazon.com/Structures-Algorithms-Python-Michael-Goodrich/dp/1118290275/)) is intended as non-commercial "fair use".
+For all the textbook code included in this repository, I manually typed it into the Python source files in the repo (rather than pasting from resources associated with the text book). All unit tests covering the textbook's code are my original work.
