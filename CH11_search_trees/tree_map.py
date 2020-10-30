@@ -92,7 +92,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
         Position.
         
         """
-        # One step right, then always left. To reach smallest value that is
+        # One step right, then always left reaches smallest value that is
         #   strictly greater than p's key.
         # Authors don't implement this one, they just say "symmetrical with TreeMap.before()"
         self._validate(p)

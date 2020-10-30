@@ -1,5 +1,8 @@
 """From LC "Design Hashset" official/main solution"""
 
+# TODO break out the linked list bucket and use it as starting point for
+#   minimalist implementation linked list. 
+
 class MyHashSet(object): # TODO does subclassing object give you __len__ or
                         # similar stuff you wouldn't otherwise have? Or is it
                         # unnecessarily explicit? Kinda thought all Python
