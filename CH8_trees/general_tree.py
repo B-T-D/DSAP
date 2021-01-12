@@ -4,8 +4,8 @@
 # Mine from tic tac toe, not "official" DSAP
 
 """
-GeneralTree class as well as a LinkedQueue class used for GeneralTree's
-implementation of breadth-first traversal.
+GeneralTree class and a LinkedQueue class used for GeneralTree's breadth-first
+traversal.
 """
 
 class GeneralTree:
@@ -16,13 +16,14 @@ class GeneralTree:
 
     class _Node:
         """Structure storing the underlying data and relevant links for
-        use by the tree class's methods."""
-        __slots__ = '_element', '_parent', '_children' # to make lighter in memory
-        #   Will the _children thing work for an arbitrary number of children?
+        use by the tree class's methods.
 
-        # Is there some smarter data structure to use than a list-array for
-        # children? Maybe a hash table since we're assuming nonordered
-        # children?
+        Currently uses a Python list to store references to an internal node's
+        children. So children are ordered, but the class isn't meant to
+        implement an ordered tree per se.
+        """
+        __slots__ = '_element', '_parent', '_children' # to make lighter in memory
+
         def __init__(self, element, parent=None, children=None):
             """
             Args:
@@ -126,7 +127,7 @@ class GeneralTree:
             e (object): Element to be stored at root.
 
         Returns:
-            (Position): New Position object represnting tree's root.
+            (Position): New Position object representing tree's root.
         """
         if self._root is not None:
             raise ValueError('Root exists')
@@ -141,21 +142,19 @@ class GeneralTree:
         Returns:
             (Position): Position of the new Node.
         """
-        # append the new Position obj to p._Node._children list
         node = self._validate(p)
         self._size += 1
         new_node = self._Node(element=e, parent=node) # new child _Node object
         node._children.append(new_node) # add it to parent node's children list
         return self._make_position(new_node) # make a position object
 
+    # todo implement _replace and _attach
+
     def _replace(self, p, e):
         raise NotImplementedError
 
     def _attach(self, p: Position, other_tree) -> None:
         """Attach tree other_tree as a child-subtree of Position p."""
-
-        # Unlike in LBT, we don't care about whether p was external, right?
-        #   Because no limitation on number of children.
         raise NotImplementedError
     
     def _delete(self, p):
@@ -177,26 +176,28 @@ class GeneralTree:
         if node is self._root:
             self._root = child # child becomes root
         else:
-            parent = node._parent
-            # todo not sure the adaptation from the LBT code is correct here,
-            #   wrt skipping the if node is parent._left stuff
-            # Might be fine though. This child's child would be "pulled up"
-            #   with it by the promotion, without any further action, right?
+            parent = node._parent # todo may lack sufficient test
+            #                           coverage/comprehensiveness
         self._size -= 1
         if node._parent is not None: # if the node was not root...
-            node._parent._children.remove(node) # ...delete node from list of its
-                                            # ...parent's child nodes
-        node._parent = node # convention for deprecated node (make it its own parent)
+            node._parent._children.remove(node) # ...delete node from list of
+            #                                       its parent's child nodes
+        node._parent = node # convention for deprecated node
+        #                       (make it its own parent)
         return node._element
 
     def _recursively_delete(self, p):
-        # Should this be a public method instead / also?
         """
         Delete Position p and all its children.
-        
+
+        Args:
+            p (Position): Position object in this tree.
+
+        Returns:
+            None
         """
         
-        # Return the element stored at p? Or return the whole subtree that was
+        # Todo Return the element stored at p? Or return the whole subtree that was
         #   deleted?
         if self.is_leaf(p):
             self._delete(p)
@@ -253,9 +254,8 @@ class GeneralTree:
         Returns:
             (int): Number of chidren nodes of position.
         """
-        # Hasty implementation bc needed to test delete, may not be smartest
-        #   But builtin len(list) should run in O(1) no different from
-        #   storing an instance variable num_children for each node.
+        #   Builtin len(list) should run in O(1), asymptotically no different
+        #   from storing an instance variable num_children for each node.
         return len(position._node._children)
 
     def is_leaf(self, position):
@@ -342,19 +342,15 @@ class GeneralTree:
         Yields:
             (Position): The next position reached by a breadth-first traversal.
         """
-        # Add chilcren to queue when the "visits" learn of them by visiting
-        #   their parent, then go back and actually visit them later once they
-        #   reach the head of the queue (as higher-height nodes are visited and
-        #   FIFO-ed out of the queue).
         if not self.is_empty():
             fringe = LinkedQueue() # Enqueue positions that are known but not yet
-            fringe.enqueue(self.root()) #   ...visited.
+            fringe.enqueue(self.root()) #   visited.
             while not fringe.is_empty():
                 position = fringe.dequeue() # remove from front of queue
                 yield position
                 for child in self.children(position):
                     fringe.enqueue(child) # Add each child of the newly visited
-                                            #  ...position to the queue
+                                            #  position to the queue
 
     def children(self, position):
         """Generate an iteration of Positions representing the children nodes
@@ -367,7 +363,8 @@ class GeneralTree:
             (Position): The next Position object among position's children.
         """
         node = self._validate(position)
-        # In current implementation, children are already stored as a python list
+        # In current implementation, children are already stored as an iterable
+        #   Python list
         for child in node._children:
             yield self._make_position(child) # yield it back as a Position,
                                                 # rather than a _Node
@@ -394,8 +391,8 @@ class GeneralTree:
             (object): The next object stored as an element of a tree Position.
                 Of whatever type that data is.
         """
-        for position in self.positions(): # Use same order as positions()
-            yield position.element()   # ...but yield elements instead of Positions
+        for position in self.positions(): # Use same order as positions(),
+            yield position.element()   # but yield elements, not Positions
 
     # --------------------- nonpublic traversal methods ----------------------
 
@@ -405,7 +402,8 @@ class GeneralTree:
         yield p # yielding p to the caller (other method in this class)
                 #   implements performing the "visit".
         for c in self.children(p):
-           for other in self._subtree_preorder(c): # recursively do preorder on c's subtree
+           for other in self._subtree_preorder(c): # recursively do preorder on
+                                                    #   c's subtree
                yield other # ...and yield each to the caller
         
     def _subtree_postorder(self, p):
@@ -413,12 +411,13 @@ class GeneralTree:
         Position p."""
         for c in self.children(p): # for each child c
             for other in self._subtree_postorder(c): # do postorder of child's
-                yield other         # ...subtrees, yielding each subtree to caller
+                yield other         # subtrees, yielding each subtree to caller
         yield p # perform visit action "post" recursing over all children
 
     # ------------------------- visual output methods --------------------------
     def parenthesize(self, position):
         """Print parenthetic representation of the subtree rooted at position.
+        This method is closest the class has to __str__ for now.
 
         Returns:
             (str): String representation of the tree.
@@ -434,7 +433,6 @@ class GeneralTree:
                 characters.append(self.parenthesize(c)) # recurse
             characters.append(')')
         return ''.join(characters)
-        
 
 class LinkedQueue:
     """FIFO queue implementation using a singly linked list for storage."""
@@ -487,10 +485,12 @@ class LinkedQueue:
 
     def enqueue(self, e):
         """Add an element to the back of the queue."""
-        newest = self._Node(e, None) # node will be new tail node bc it's going in at end
+        newest = self._Node(e, None) # node will be new tail node bc it's
+                                    #       going in at end
         if self.is_empty():
             self._head = newest
         else:
             self._tail._next = newest
         self._tail = newest # update reference to tail node
         self._size += 1    
+
